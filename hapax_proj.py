@@ -13,10 +13,10 @@ import numpy as np
 from scipy import stats
 from scipy.stats import ttest_ind
 
-# Download required NLTK packages
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('wordnet')
+## Download required NLTK packages
+# nltk.download('stopwords')
+# nltk.download('punkt')
+# nltk.download('wordnet')
 
 df = pd.read_csv('BOM.csv')
 
@@ -146,17 +146,17 @@ plt.show()
 
 
 
-# Assuming your DataFrame has a 'chapter' column
-# Heatmap of Hapax Legomena Counts per Chapter
-# First, create a pivot table with chapter and event as indices and hapax count as values
-chapter_event_hapax = all_hapax_details_df.pivot_table(index='chapter', columns='event', values='hapax', aggfunc='count', fill_value=0)
+# # Assuming your DataFrame has a 'chapter' column
+# # Heatmap of Hapax Legomena Counts per Chapter
+# # First, create a pivot table with chapter and event as indices and hapax count as values
+# chapter_event_hapax = all_hapax_details_df.pivot_table(index='chapter', columns='event', values='hapax', aggfunc='count', fill_value=0)
 
-plt.figure(figsize=(12, 8))
-sns.heatmap(chapter_event_hapax, cmap='viridis', linewidths=.5)
-plt.title('Heatmap of Hapax Legomena Counts per Chapter and Event')
-plt.xlabel('Event')
-plt.ylabel('Chapter')
-plt.show()
+# plt.figure(figsize=(12, 8))
+# sns.heatmap(chapter_event_hapax, cmap='viridis', linewidths=.5)
+# plt.title('Heatmap of Hapax Legomena Counts per Chapter and Event')
+# plt.xlabel('Event')
+# plt.ylabel('Chapter')
+# plt.show()
 
 
 
@@ -185,7 +185,7 @@ std_non_written = np.std(non_written_counts)
 # Preparing the data for the Chi-Square Test
 # Categorizing the counts into 'high' and 'low' based on the median value
 median_hapax_count = event_hapax_counts['hapax_count'].median()
-event_hapax_counts['count_category'] = event_hapax_counts['hapax_count'].apply(lambda x: 'High' if x > median_hapax_count else 'Low')
+# event_hapax_counts['count_category'] = event_hapax_counts['hapax_count'].apply(lambda x: 'High' if x > median_hapax_count*2 else 'Low')
 
 # Constructing the contingency table for the Chi-Square Test
 chi2_table = pd.crosstab(event_hapax_counts['event_written'], event_hapax_counts['count_category'])
@@ -195,8 +195,8 @@ chi2_stat, chi2_p_value, chi2_dof, chi2_expected = chi2_contingency(chi2_table)
 
 chi2_stat, chi2_p_value, chi2_dof, chi2_expected
 
-# Categorizing hapax counts as 'High' or 'Low'
-event_hapax_counts['count_category'] = event_hapax_counts['hapax_count'].apply(lambda x: 'High' if x > median_hapax_count else 'Low')
+# Categorizing hapax counts as 'High' (greater than 3 times median freq) or 'Low'
+event_hapax_counts['count_category'] = event_hapax_counts['hapax_count'].apply(lambda x: 'High' if x > median_hapax_count*3 else 'Low')
 
 # Creating the contingency table
 chi2_table = pd.crosstab(event_hapax_counts['event_written'], event_hapax_counts['count_category'])
